@@ -1,0 +1,26 @@
+name: Version Bump
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check commit messages for "feat"
+      run: |
+          TOKEN=$GITHUB_TOKEN
+          COMMIT_MESSAGES=$(git log -1 --pretty=format:"%s")
+          
+          if echo "$COMMIT_MESSAGES" | grep -q "feat"; then
+          echo "Found 'feat' in commit messages"
+          CURRENT_VERSION=$(node -pe "require('./package.json').version")
+          MAJOR_VERSION=$(echo $CURRENT_VERSION | cut -d '.' -f 1)
+          NEW_MAJOR_VERSION=$((MAJOR_VERSION + 1))
+          NEW_VERSION="$NEW_MAJOR_VERSION.0.0"
+          npm version $NEW_VERSION --no-git-tag-version
+          echo "Updated package version to $NEW_VERSION"
+          # git config --local user.email "petyoplpetrov@gmail.com"
+          # git config --local user.name "Petyo.Petrov"
+          # git commit -a -m "Bump major version to $NEW_VERSION"
+          # git push
+          else
+          echo "'feat' not found in commit messages"
+          fi
+      shell: bash  

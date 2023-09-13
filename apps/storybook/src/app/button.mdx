@@ -1,0 +1,26 @@
+{/* Button.mdx */}
+
+import {
+  Canvas,
+  Meta,
+  Title,
+  Description,
+  Controls,
+  Primary,
+  Source,
+} from '@storybook/blocks';
+
+import * as BtnStories from './button.stories';
+
+<Meta of={BtnStories} />
+<Title />
+
+I am button description
+
+<Description />
+
+<Canvas of={BtnStories.ButtonElement} />
+
+<Source of={BtnStories.ButtonElement} />
+
+<Controls />

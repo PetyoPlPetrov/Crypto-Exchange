@@ -1,0 +1,35 @@
+name: Bump Version on Feat
+
+on: [push]
+
+
+jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Change this to your desired Node.js version
+
+    
+      - name: Run Version Bump Action
+        uses: ./.github/actions/version-bump
+        with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  print_username_using_deps: 
+    needs: bump_version
+    uses: ./.github/workflows/called.yml
+    with:
+        username: "some username"
+
+  print_username: 
+    uses: ./.github/workflows/called.yml
+    with:
+        username: "some username"
+      
