@@ -16,7 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "libs/components": ["libs/components/src/index.ts"],
-      "libs/services": ["libs/services/src/index.ts"]
+      "libs/services": ["libs/services/src/index.ts"],
+      "search-bar": ["libs/search-bar/src/index.ts"],
+      "search-layout": ["libs/search-layout/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
