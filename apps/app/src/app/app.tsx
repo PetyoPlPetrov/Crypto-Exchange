@@ -1,11 +1,11 @@
-import { GlobalStyles, theme } from 'libs/components';
+import { FlexContainer, GlobalStyles, theme } from 'libs/components';
 import { DataProvider } from 'libs/services';
 import { useState } from 'react';
 import { SearchBar } from 'search-bar';
 import { SearchLayout } from 'search-layout';
 import { ThemeProvider } from 'styled-components';
-import { getKrakenData } from './apiConfigs/kraken';
 import { getHuobiData } from './apiConfigs/huobi';
+import { getKrakenData } from './apiConfigs/kraken';
 
 const context = {
   api: [getKrakenData, getHuobiData],
@@ -19,10 +19,15 @@ export function App() {
     <ThemeProvider theme={theme}>
       <DataProvider.Provider value={context}>
         <GlobalStyles />
-        <div role="navigation">
+        <FlexContainer
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          gap="1rem"
+        >
           <SearchBar onSearchChanged={setState} />
           <SearchLayout pairs={state} isStale={isStale} />
-        </div>
+        </FlexContainer>
       </DataProvider.Provider>
     </ThemeProvider>
   );

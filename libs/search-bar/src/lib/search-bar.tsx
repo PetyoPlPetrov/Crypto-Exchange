@@ -1,8 +1,8 @@
 import { useDebounce } from 'libs/services';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { CustomInput } from './components/CustomInput';
-import { transformInputIntoSearchString } from './utils/';
 import { InputContainer } from './components/InputContainer';
+import { transformInputIntoSearchString } from './utils/';
 /* eslint-disable-next-line */
 export interface SearchBarProps {
   onSearchChanged: Dispatch<
@@ -15,29 +15,33 @@ export function SearchBar({ onSearchChanged }: SearchBarProps) {
   const deferredQuery = useDebounce(value, 2000);
   const deffered = transformInputIntoSearchString(deferredQuery);
 
+  const inputRef = useRef(null);
+
   useEffect(() => {
-    if (value) {
-      onSearchChanged({
-        current: value,
-        deffered,
-      });
+    if (inputRef.current) {
+      inputRef.current?.focus();
     }
-  }, [deferredQuery, value, deffered]);
+  }, []);
+
+  useEffect(() => {
+    onSearchChanged({
+      current: value,
+      deffered,
+    });
+  }, [value, deffered]);
 
   return (
     <>
       <h1>Type some crypto pairs</h1>
-
       <InputContainer>
         <CustomInput
           value={value}
+          ref={inputRef}
           className="search-box"
           onChange={(e) => setValue(e.target.value)}
-          placeholder="BTC/USD"
+          placeholder="BTC/USD or btcusd"
         ></CustomInput>
       </InputContainer>
     </>
   );
 }
-
-export default SearchBar;

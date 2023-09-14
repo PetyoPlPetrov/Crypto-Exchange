@@ -5,6 +5,7 @@ interface ButtonProps {
   backgroundColor?: string;
   /*Chanhe the text of the button */
   text?: string;
+  onClick: () => void;
 }
 
 const ButtonInner = styled.button<ButtonProps>`

@@ -10,7 +10,6 @@ export const CustomInput = styled(Input)<{ ready?: boolean }>`
   font-size: 14px;
 
   padding: 0.5rem;
-  min-width: 40%; /* Adjust the width as needed */
 
   box-shadow: ${(props) => props.theme.white.shadows.inputShadow};
   border: 1px solid ${(props) => props.theme.white.colors.secondary};

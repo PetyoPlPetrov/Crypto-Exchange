@@ -4,7 +4,7 @@ import { createGlobalStyle } from 'styled-components';
 export const GlobalStyles = createGlobalStyle`
   /* Font Family */
   body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Lato', sans-serif;
   }
 
   /* Headers */
@@ -34,6 +34,7 @@ export const theme = {
         rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset`,
       inputShadow: `rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
         rgba(0, 0, 0, 0.3) 0px 1px 3px -1px`,
+      itemRow: `rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;`,
     },
     colors: {
       primary: 'white',

@@ -1,33 +1,45 @@
-import { memo } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
+import { LayoutContainer } from './components/Layout';
+import { sortByNameAndPrice } from './helpers/sortData';
 import { withData } from './hocs/withData';
+import { Exchange } from './types';
+import { withError } from './hocs/withError';
 
 /* eslint-disable-next-line */
 export interface SearchLayoutProps {
-  data?: any[];
+  data?: Exchange[];
   isStale: boolean;
+  isLoading?: boolean;
 }
 
-function SearchLayoutInner({ data, isStale }: SearchLayoutProps) {
+function SearchLayoutInner({ data, isStale, isLoading }: SearchLayoutProps) {
+  const [ascending, setAscending] = useState(true);
+  const [sortedData, setSortedData] = useState<Exchange[]>([]);
+
+  useEffect(() => {
+    if (Array.isArray(data)) {
+      setSortedData(data.sort(sortByNameAndPrice(ascending)));
+    }
+  }, [data]);
+
+  const toggleSort = useCallback(() => {
+    setAscending((p) => {
+      setSortedData([...sortedData].sort(sortByNameAndPrice(!p)));
+      return !p;
+    });
+  }, [sortedData]);
+
   return (
     <>
-      <h1>Results</h1>
-      <div
-        style={{
-          opacity: isStale ? 0.5 : 1,
-        }}
-      >
-        {data?.map((exchange, ind) => {
-          return (
-            <div key={ind}>
-              {exchange.map((pair: string) => (
-                <div key={ind + pair}>{pair}</div>
-              ))}
-            </div>
-          );
-        })}
-      </div>
+      <LayoutContainer
+        onSortDirectionChange={toggleSort}
+        ascending={ascending}
+        isStale={isStale}
+        sortedData={sortedData}
+        isLoading={!!isLoading}
+      />
     </>
   );
 }
-export const SearchLayout = withData(memo(SearchLayoutInner));
-export default SearchLayout;
+
+export const SearchLayout = withData(withError(memo(SearchLayoutInner)));
