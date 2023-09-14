@@ -5,20 +5,20 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { assertOk, makeError } from '../helpers';
+import { assertOk, makeError } from '../helpers/dataLoaderUtils';
 
 interface DataProviderProps {
-  api?: Array<() => Promise<any>>;
+  api?: Array<(tradingPairs: string) => Promise<any[]>>;
 }
 export const DataProvider = createContext<DataProviderProps>({});
 
 export function useLoading() {
   const [isLoading, setLoading] = useState(false);
   const [isLoaded, setLoaded] = useState(false);
-  const [error, setError] = useState(undefined);
+  const [error, setError] = useState<PromiseRejectedResult>();
 
   const executeLoad = useCallback(
-    async (load: () => Promise<any>, onSuccess: any, onError?: any) => {
+    async (load: Promise<any>[], onSuccess: any) => {
       setLoading(true);
 
       function onLoadComplete() {
@@ -28,14 +28,20 @@ export function useLoading() {
       return Promise.allSettled(load)
         .then((p) => {
           onLoadComplete();
-          onSuccess(
-            p.filter((e) => e.status === 'fulfilled').map((e) => e.value)
-          );
+          const successful = p
+            .filter((e) => e.status === 'fulfilled')
+            .map((e: any) => e.value);
+          const rejected = p.filter(
+            (e) => e.status === 'rejected'
+          )[0] as PromiseRejectedResult;
+          onSuccess(successful);
+          if (rejected !== undefined) {
+            setError(rejected);
+          }
         })
         .catch((err: any) => {
           onLoadComplete();
           setError(err);
-          onError?.(err);
         });
     },
     [setLoading, setLoaded, setError]
@@ -44,9 +50,8 @@ export function useLoading() {
   return [{ isLoading, isLoaded, error }, { executeLoad }];
 }
 
-export function useApiLoader(hookName: string) {
+export function useApiLoader() {
   const ctx = useContext(DataProvider);
-  assertOk(!!ctx?.api, `${hookName} cannot be used outside DataProvider`);
 
   const [{ isLoading, isLoaded, error }, { executeLoad }] = useLoading();
 
@@ -62,23 +67,23 @@ export function useApiLoader(hookName: string) {
   return [{ isLoading, isLoaded, error, executeApiLoad }];
 }
 
-export function useGetData(text: string) {
+export function useGetData(tradingPairs: string) {
   const ctx = useContext(DataProvider);
   assertOk(!!ctx?.api, makeError('useGetData'));
   const [data, setData] = useState([]);
-  const [{ isLoading, isLoaded, executeApiLoad, error }] =
-    useApiLoader('useGetData');
+  const [{ isLoading, isLoaded, executeApiLoad, error }] = useApiLoader();
 
   useEffect(() => {
-    if (text) {
+    if (tradingPairs) {
       executeApiLoad(
-        (api: DataProviderProps['api']) => api?.map((f: any) => f(text)),
+        (api: DataProviderProps['api']) =>
+          api?.map((f: any) => f(tradingPairs)),
         setData
       );
     } else {
       setData([]);
     }
-  }, [executeApiLoad, text]);
+  }, [executeApiLoad, tradingPairs]);
 
   return [{ data, isLoading, isLoaded, error }];
 }

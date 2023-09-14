@@ -1,3 +1,31 @@
+// GlobalStyles.js
+import { createGlobalStyle } from 'styled-components';
+
+export const GlobalStyles = createGlobalStyle`
+  /* Font Family */
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  /* Headers */
+  h1, h2, h3 {
+    font-weight: bold;
+    color: #333333;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  /* Text */
+  p {
+    font-size: 16px;
+    color: #666666;
+  }
+
+
+`;
+
 export const theme = {
   white: {
     shadows: {
@@ -9,7 +37,7 @@ export const theme = {
     },
     colors: {
       primary: 'white',
-      secondary: '#6c757d',
+      secondary: '#e6e8ea',
       success: '#28a745',
       error: '#dc3545',
     },
