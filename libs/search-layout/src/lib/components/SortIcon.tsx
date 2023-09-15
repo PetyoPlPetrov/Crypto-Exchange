@@ -7,6 +7,6 @@ export const RotatableIcon = styled.span<{
   display: inline-block;
   transform: rotate(${(props) => props.rotate || 0}deg);
   opacity: ${(props) => (props.disbaled ? 0.5 : 1)};
-  cursor: pointer;
+  cursor: ${(props) => (props.disbaled ? 'not-allowed' : 'pointer')};
   color: green;
 `;

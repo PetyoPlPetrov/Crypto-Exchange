@@ -57,7 +57,7 @@ export const LayoutContainer = memo(
       >
         <TableHeader>
           <RotatableIcon
-            disbaled={sortedData.length == 0}
+            disbaled={sortedData.length <= 1}
             onClick={onSortDirectionChange}
             rotate={!ascending ? 180 : 0}
           >

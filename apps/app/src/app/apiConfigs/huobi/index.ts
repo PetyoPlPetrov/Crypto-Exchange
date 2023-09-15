@@ -12,7 +12,7 @@ export const getHuobiData = async (args: string): Promise<ExchangeResponse> => {
     .then(({ data = [] }) => {
       const pairs = data
         .filter((e: HuobiExchangepair) =>
-          tradingPairs.some((p) => e.symbol.includes(p))
+          tradingPairs.some((p) => e.symbol === p)
         )
         .map((currentPair: HuobiExchangepair) => {
           return {

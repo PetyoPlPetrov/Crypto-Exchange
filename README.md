@@ -12,6 +12,8 @@ The application consists of 2 apps (main app and storybook) and
 4 modules (1 library for reusable components/a tiny design system and 3 encapsuled modules)
 packaged separately using NX manager. The app has an external config with inversion of 
 control via the DataProvder and useGetData fn (and custom hocs).
+The pooling update interval is passed manually from the app entrypoint
+
 PS - some websites are not well suited for crawling via UI and cors errors occasionally
 happens which prevent the proper error handling.
 

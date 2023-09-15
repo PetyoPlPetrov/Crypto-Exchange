@@ -80,7 +80,8 @@ export function useApiLoader(): [
 }
 
 export function useGetData(
-  tradingPairs: string
+  tradingPairs: string,
+  updateInterval: number
 ): [{ data: Exchange[]; isLoading: boolean; isLoaded: boolean; error: any }] {
   const ctx = useContext(DataProvider);
   assertOk(!!ctx?.api, makeError('useGetData'));
@@ -88,16 +89,32 @@ export function useGetData(
   const [{ isLoading, isLoaded, executeApiLoad, error }] = useApiLoader();
 
   useEffect(() => {
+    let int: any;
     if (tradingPairs) {
-      executeApiLoad(
-        (api: DataProviderProps['api']) =>
-          api?.map((f: any) => f(tradingPairs)),
-        setData
-      );
+      setTimeout(() => {
+        executeApiLoad(
+          (api: DataProviderProps['api']) =>
+            api?.map((f: any) => f(tradingPairs)),
+          setData
+        );
+      });
+
+      int = setInterval(() => {
+        executeApiLoad(
+          (api: DataProviderProps['api']) =>
+            api?.map((f: any) => f(tradingPairs)),
+          setData
+        );
+      }, updateInterval);
     } else {
       setData([]);
+      clearInterval(int);
     }
-  }, [executeApiLoad, tradingPairs]);
+
+    return () => {
+      clearInterval(int);
+    };
+  }, [executeApiLoad, tradingPairs, updateInterval]);
 
   return [{ data, isLoading, isLoaded, error }];
 }

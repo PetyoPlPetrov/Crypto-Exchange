@@ -26,7 +26,7 @@ export function App() {
           gap="1rem"
         >
           <SearchBar onSearchChanged={setState} />
-          <SearchLayout pairs={state} isStale={isStale} />
+          <SearchLayout updateInterval={5000} pairs={state} isStale={isStale} />
         </FlexContainer>
       </DataProvider.Provider>
     </ThemeProvider>
