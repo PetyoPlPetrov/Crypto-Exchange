@@ -7,6 +7,8 @@ const RowWrapper = styled(FlexContainer)<{ isStale: boolean }>`
   box-shadow: ${(props) => props.theme.white.shadows.itemRow};
   padding: 1rem;
   opacity: ${(props) => (props.isStale ? 0.5 : 1)};
+  transition: ${(props) =>
+    props.isStale ? 'opacity 0.2s 0.2s linear' : 'opacity 0s 0s linear'};
 
   &:hover {
     background-color: ${(props) =>
